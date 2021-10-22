@@ -12,5 +12,5 @@ Material3 is currently only available in androidx snapshot repository. But hopef
     }
 ```
 
-![Screenshoot](device-2021-10-21-155835.png)
+![Screenshoot](screenshoot.png)
 
