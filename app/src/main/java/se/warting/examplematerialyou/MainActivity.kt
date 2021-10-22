@@ -14,7 +14,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -37,6 +39,7 @@ import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.rememberScaffoldState
 import androidx.compose.material3.samples.ButtonSample
 import androidx.compose.material3.samples.ButtonWithIconSample
+import androidx.compose.material3.samples.ColorSchemeSample
 import androidx.compose.material3.samples.ElevatedButtonSample
 import androidx.compose.material3.samples.ExtendedFloatingActionButtonSample
 import androidx.compose.material3.samples.FilledTonalButtonSample
@@ -118,11 +121,16 @@ fun MyNavigationRailSample() {
     }
 }
 
+sealed class Pages {
+    object List : Pages()
+    object Colors : Pages()
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MySmallTopAppBar() {
     val scrollBehavior = remember { TopAppBarDefaults.pinnedScrollBehavior() }
+    val page = remember { mutableStateOf<Pages>(Pages.List) }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
@@ -142,15 +150,17 @@ fun MySmallTopAppBar() {
             )
         },
         bottomBar = {
-            MyNavigationBarItemWithBadge()
+            MyNavigationBarItemWithBadge {
+                page.value = it
+            }
         },
         floatingActionButton = {
             // Use only 1 and remove column
             Column(horizontalAlignment = Alignment.End) {
-                ExtendedFloatingActionButtonSample()
+                SmallFloatingActionButtonSample()
                 FloatingActionButtonSample()
                 LargeFloatingActionButtonSample()
-                SmallFloatingActionButtonSample()
+                ExtendedFloatingActionButtonSample()
             }
         },
         topBar = {
@@ -187,93 +197,149 @@ fun MySmallTopAppBar() {
             )
         },
         content = { innerPadding ->
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                contentPadding = innerPadding,
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
+
+            when (page.value) {
+                Pages.Colors -> ColorSchemeSample()
+                Pages.List -> {
 
 
-                item {
-
-                    Text(text = if (scaffoldState.drawerState.isClosed) ">>> Swipe to open or close drawer >>>" else "<<< Swipe <<<")
-                    Spacer(Modifier.height(20.dp))
-                    Button(onClick = {
-                        scope.launch {
-                            scaffoldState.drawerState.open()
-                        }
-                    }) {
-                        Text("Click to open drawer")
-                    }
-                }
-                item {
-                    ButtonSample()
-                    ButtonWithIconSample()
-                    ElevatedButtonSample()
-                    FilledTonalButtonSample()
-                    OutlinedButtonSample()
-                    TextButtonSample()
-                }
-
-                item {
-                    IconButtonSample()
-                    IconToggleButtonSample()
-                }
-                val list = (0..15).map { it.toString() }
-                items(count = list.size) {
-                    Text(
-                        text = list[it],
-                        style = MaterialTheme.typography.bodyLarge,
+                    LazyColumn(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
-                    )
+                            .fillMaxSize()
+                            .padding(horizontal = 16.dp),
+                        contentPadding = innerPadding,
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+
+
+                        item {
+
+                            Text(text = if (scaffoldState.drawerState.isClosed) ">>> Swipe to open or close drawer >>>" else "<<< Swipe <<<")
+                            Spacer(Modifier.height(20.dp))
+                            Button(onClick = {
+                                scope.launch {
+                                    scaffoldState.drawerState.open()
+                                }
+                            }) {
+                                Text("Click to open drawer")
+                            }
+                        }
+                        item {
+                            ButtonSample()
+                            ButtonWithIconSample()
+                            ElevatedButtonSample()
+                            FilledTonalButtonSample()
+                            OutlinedButtonSample()
+                            TextButtonSample()
+                        }
+
+                        item {
+                            IconButtonSample()
+                            IconToggleButtonSample()
+                        }
+                        item {
+
+
+                            Text(
+                                text = "typography.displayLarge",
+                                style = MaterialTheme.typography.displayLarge
+                            )
+                            Text(
+                                text = "typography.displayMedium",
+                                style = MaterialTheme.typography.displayMedium
+                            )
+                            Text(
+                                text = "typography.displaySmall",
+                                style = MaterialTheme.typography.displaySmall
+                            )
+                            Text(
+                                text = "typography.headlineLarge",
+                                style = MaterialTheme.typography.headlineLarge
+                            )
+                            Text(
+                                text = "typography.headlineMedium",
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            Text(
+                                text = "typography.headlineSmall",
+                                style = MaterialTheme.typography.headlineSmall
+                            )
+                            Text(
+                                text = "typography.titleLarge",
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text = "typography.titleMedium",
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = "typography.titleSmall",
+                                style = MaterialTheme.typography.titleSmall
+                            )
+                            Text(
+                                text = "typography.bodyLarge",
+                                style = MaterialTheme.typography.bodyLarge
+                            )
+                            Text(
+                                text = "typography.bodyMedium",
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                            Text(
+                                text = "typography.bodySmall",
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                            Text(
+                                text = "typography.labelLarge",
+                                style = MaterialTheme.typography.labelLarge
+                            )
+                            Text(
+                                text = "typography.labelMedium",
+                                style = MaterialTheme.typography.labelMedium
+                            )
+                            Text(
+                                text = "typography.labelSmall",
+                                style = MaterialTheme.typography.labelSmall
+                            )
+                        }
+
+                    }
                 }
             }
         }
     )
 }
 
+
 @Composable
-fun MyNavigationBarItemWithBadge() {
+fun MyNavigationBarItemWithBadge(navigate: (Pages) -> Unit) {
     NavigationBar {
         NavigationBarItem(
             icon = {
                 BadgedBox(badge = { Badge { Text("8") } }) {
                     Icon(
-                        Icons.Filled.Star,
+                        Icons.Filled.List,
                         contentDescription = "Favorite"
                     )
                 }
             },
             selected = true,
-            onClick = {}
+            onClick = {
+                navigate(Pages.List)
+            }
         )
         NavigationBarItem(
             icon = {
                 BadgedBox(badge = { Badge { Text("8") } }) {
                     Icon(
-                        Icons.Filled.Star,
+                        Icons.Filled.Palette,
                         contentDescription = "Favorite"
                     )
                 }
             },
             selected = false,
-            onClick = {}
-        )
-        NavigationBarItem(
-            icon = {
-                BadgedBox(badge = { }) {
-                    Icon(
-                        Icons.Filled.Star,
-                        contentDescription = "Favorite"
-                    )
-                }
-            },
-            selected = false,
-            onClick = {}
+            onClick = {
+                navigate(Pages.Colors)
+            }
         )
     }
 }

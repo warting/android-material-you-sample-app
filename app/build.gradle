@@ -57,7 +57,7 @@ dependencies {
     implementation "androidx.compose.material3:material3:1.0.0-SNAPSHOT"
     implementation "androidx.compose.material3:material3-samples:1.0.0-SNAPSHOT"
     implementation "androidx.compose.material:material-icons-core-samples:1.1.0-SNAPSHOT"
-
+    implementation "androidx.compose.material:material-icons-extended:1.1.0-SNAPSHOT"
 
     implementation "androidx.compose.foundation:foundation:1.1.0-SNAPSHOT"
 
