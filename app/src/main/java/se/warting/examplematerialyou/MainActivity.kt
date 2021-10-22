@@ -13,26 +13,28 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationDrawer
+import androidx.compose.material3.NavigationRail
+import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.rememberScaffoldState
 import androidx.compose.material3.samples.ButtonSample
 import androidx.compose.material3.samples.ButtonWithIconSample
 import androidx.compose.material3.samples.ElevatedButtonSample
@@ -42,12 +44,16 @@ import androidx.compose.material3.samples.FloatingActionButtonSample
 import androidx.compose.material3.samples.IconButtonSample
 import androidx.compose.material3.samples.IconToggleButtonSample
 import androidx.compose.material3.samples.LargeFloatingActionButtonSample
+import androidx.compose.material3.samples.NavigationDrawerSample
 import androidx.compose.material3.samples.OutlinedButtonSample
 import androidx.compose.material3.samples.SmallFloatingActionButtonSample
 import androidx.compose.material3.samples.TextButtonSample
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -65,7 +71,8 @@ class MainActivity : ComponentActivity() {
                 colorScheme = dynamicLightColorScheme(this)
             ) {
                 Column {
-                    MyNavigationDrawerSample()
+                    MySmallTopAppBar()
+                    NavigationDrawerSample()
                     //ColorSchemeSample()
                     //SimpleSmallTopAppBar()
                     //SimpleCenterAlignedTopAppBar()
@@ -94,45 +101,67 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@Composable
+fun MyNavigationRailSample() {
+    var selectedItem by remember { mutableStateOf(0) }
+    val items = listOf("Home", "Search", "Settings")
+    val icons = listOf(Icons.Filled.Home, Icons.Filled.Search, Icons.Filled.Settings)
+    NavigationRail(modifier = Modifier.fillMaxWidth()) {
+        items.forEachIndexed { index, item ->
+            NavigationRailItem(
+                icon = { Icon(icons[index], contentDescription = item) },
+                label = { Text(item) },
+                selected = selectedItem == index,
+                onClick = { selectedItem = index }
+            )
+        }
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyNavigationDrawerSample() {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
+fun MySmallTopAppBar() {
+    val scrollBehavior = remember { TopAppBarDefaults.pinnedScrollBehavior() }
+    val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
-    NavigationDrawer(
-        drawerState = drawerState,
+    Scaffold(
+        scaffoldState = scaffoldState,
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         drawerContent = {
             Button(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 16.dp),
-                onClick = { scope.launch { drawerState.close() } },
+                onClick = {
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                },
                 content = { Text("Close Drawer") }
             )
         },
-        content = {
-
-            MySmallTopAppBar(drawerState) {
-                scope.launch { drawerState.open() }
-            }
-        }
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MySmallTopAppBar(drawerState: DrawerState, openDrawer: () -> Unit) {
-    val scrollBehavior = remember { TopAppBarDefaults.pinnedScrollBehavior() }
-    Scaffold(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         bottomBar = {
             MyNavigationBarItemWithBadge()
+        },
+        floatingActionButton = {
+            // Use only 1 and remove column
+            Column(horizontalAlignment = Alignment.End) {
+                ExtendedFloatingActionButtonSample()
+                FloatingActionButtonSample()
+                LargeFloatingActionButtonSample()
+                SmallFloatingActionButtonSample()
+            }
         },
         topBar = {
             SmallTopAppBar(
                 title = { Text("Small TopAppBar") },
                 navigationIcon = {
-                    IconButton(onClick = { openDrawer() }) {
+                    IconButton(onClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.Menu,
                             contentDescription = "Localized description"
@@ -169,9 +198,13 @@ fun MySmallTopAppBar(drawerState: DrawerState, openDrawer: () -> Unit) {
 
                 item {
 
-                    Text(text = if (drawerState.isClosed) ">>> Swipe to open or close drawer >>>" else "<<< Swipe <<<")
+                    Text(text = if (scaffoldState.drawerState.isClosed) ">>> Swipe to open or close drawer >>>" else "<<< Swipe <<<")
                     Spacer(Modifier.height(20.dp))
-                    Button(onClick = { openDrawer() }) {
+                    Button(onClick = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
+                    }) {
                         Text("Click to open drawer")
                     }
                 }
@@ -182,12 +215,6 @@ fun MySmallTopAppBar(drawerState: DrawerState, openDrawer: () -> Unit) {
                     FilledTonalButtonSample()
                     OutlinedButtonSample()
                     TextButtonSample()
-                }
-                item {
-                    ExtendedFloatingActionButtonSample()
-                    FloatingActionButtonSample()
-                    LargeFloatingActionButtonSample()
-                    SmallFloatingActionButtonSample()
                 }
 
                 item {
