@@ -7,19 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
@@ -29,13 +24,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.rememberScaffoldState
 import androidx.compose.material3.samples.ButtonSample
 import androidx.compose.material3.samples.ButtonWithIconSample
@@ -47,16 +39,13 @@ import androidx.compose.material3.samples.FloatingActionButtonSample
 import androidx.compose.material3.samples.IconButtonSample
 import androidx.compose.material3.samples.IconToggleButtonSample
 import androidx.compose.material3.samples.LargeFloatingActionButtonSample
-import androidx.compose.material3.samples.NavigationDrawerSample
 import androidx.compose.material3.samples.OutlinedButtonSample
 import androidx.compose.material3.samples.SmallFloatingActionButtonSample
 import androidx.compose.material3.samples.TextButtonSample
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -70,53 +59,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MaterialTheme(
-                colorScheme = dynamicLightColorScheme(this)
-            ) {
-                Column {
-                    MySmallTopAppBar()
-                    NavigationDrawerSample()
-                    //ColorSchemeSample()
-                    //SimpleSmallTopAppBar()
-                    //SimpleCenterAlignedTopAppBar()
-                    //EnterAlwaysSmallTopAppBar()
-                    //ExitUntilCollapsedMediumTopAppBar()
-                    //ExitUntilCollapsedLargeTopAppBar()
-                    //AlertDialogSample()
-                    //AlertDialogWithIconSample()
-                    //NavigationBarItemWithBadge()
-                    //NavigationDrawerSample()
-                    //ExtendedFloatingActionButtonSample()
-                    //FloatingActionButtonSample()
-                    //LargeFloatingActionButtonSample()
-                    //SmallFloatingActionButtonSample()
-                    //NavigationBarSample()
-                    //NavigationBarWithOnlySelectedLabelsSample()
-                    //NavigationRailBottomAlignSample()
-                    //NavigationRailSample()
-                    //NavigationRailWithOnlySelectedLabelsSample()
-                    //AppIcons()
-                    //DrawIcon()
-                }
+            ExampleMaterialYouTheme {
+                MySmallTopAppBar()
+                //ColorSchemeSample()
+                //SimpleSmallTopAppBar()
+                //SimpleCenterAlignedTopAppBar()
+                //EnterAlwaysSmallTopAppBar()
+                //ExitUntilCollapsedMediumTopAppBar()
+                //ExitUntilCollapsedLargeTopAppBar()
+                //AlertDialogSample()
+                //AlertDialogWithIconSample()
+                //NavigationBarItemWithBadge()
+                //NavigationDrawerSample()
+                //ExtendedFloatingActionButtonSample()
+                //FloatingActionButtonSample()
+                //LargeFloatingActionButtonSample()
+                //SmallFloatingActionButtonSample()
+                //NavigationBarSample()
+                //NavigationBarWithOnlySelectedLabelsSample()
+                //NavigationRailBottomAlignSample()
+                //NavigationRailSample()
+                //NavigationRailWithOnlySelectedLabelsSample()
+                //AppIcons()
+                //DrawIcon()
             }
-        }
-    }
-}
-
-
-@Composable
-fun MyNavigationRailSample() {
-    var selectedItem by remember { mutableStateOf(0) }
-    val items = listOf("Home", "Search", "Settings")
-    val icons = listOf(Icons.Filled.Home, Icons.Filled.Search, Icons.Filled.Settings)
-    NavigationRail(modifier = Modifier.fillMaxWidth()) {
-        items.forEachIndexed { index, item ->
-            NavigationRailItem(
-                icon = { Icon(icons[index], contentDescription = item) },
-                label = { Text(item) },
-                selected = selectedItem == index,
-                onClick = { selectedItem = index }
-            )
         }
     }
 }
@@ -344,22 +310,10 @@ fun MyNavigationBarItemWithBadge(navigate: (Pages) -> Unit) {
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Column() {
-
-
-        Button(onClick = { /*TODO*/ }) {
-            Text(text = "Knappi!")
-        }
-        Text(text = "Hello $name!")
-    }
-}
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun DefaultPreview() {
     ExampleMaterialYouTheme {
-        Greeting("Android")
+        MySmallTopAppBar()
     }
 }

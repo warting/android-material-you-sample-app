@@ -1,9 +1,10 @@
 package se.warting.examplematerialyou.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+
 //
 //private val DarkColorPalette = darkColors(
 //    primary = Purple200,
@@ -28,15 +29,13 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun ExampleMaterialYouTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
 
-
+    val context = LocalContext.current
     MaterialTheme(
-        //colors = colors,
-        typography = Typography,
-        //shapes = Shapes,
+        colorScheme = dynamicLightColorScheme(context),
+        //typography = Typography,
         content = content
     )
 }
