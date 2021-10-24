@@ -8,7 +8,7 @@ Material3 is currently only available in androidx snapshot repository. But hopef
     repositories {
         google()
         mavenCentral()
-        maven { url "https://androidx.dev/snapshots/builds/7847492/artifacts/repository" }
+        maven { url "https://androidx.dev/snapshots/builds/7850066/artifacts/repository" }
     }
 ```
 
